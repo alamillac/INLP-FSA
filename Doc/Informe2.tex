@@ -1,0 +1,92 @@
+\documentclass[letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage[caption = false]{subfig}
+\usepackage{float}
+\usepackage{enumerate}
+
+\title{INLP, Finite State Automata lab}
+\author{Andrés F. Lamilla}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Goal}
+For this exercise we have to build a FSA to recognize different dates.
+
+\section{Code}
+The main code that has the FSA is called labFSA.py. This code can be run with a python 2.7 interpreter and it is necessary to have the jpbarrette-moman library.
+
+\subsection{FSA}
+For finding the different dates format I build several FSA.
+
+One to find all the months format called MONTH, another to find all the years (YEAR) other for find days (DAY) other to find the separator of day, months and years (ex. [[YEAR]][[DAY]]) called SEPARATOR and finally other that cover all the alphabet but digits (ANY).
+
+In particular the rule MONTH cover all the posible months format, ex: ['January', 'january', 'jan', 'Jan', 'may', '01', '1', '08', '9', '12']. YEAR cover all the years from 0 to 9999 and DAY all the numbers from 0 to 31. SEPARATOR cover all the possibilities of the separators '[-,. ]'
+
+With these FSA I build others that find a complete date in a line of text.
+
+\begin{enumerate}
+    \item ANY SEPARATOR MONTH SEPARATOR DAY SEPARATOR YEAR SEPARATOR ANY
+    \item ANY SEPARATOR DAY SEPARATOR MONTH SEPARATOR YEAR SEPARATOR ANY
+    \item YEAR SEPARATOR MONTH SEPARATOR DAY
+    \item ANY SEPARATOR YEAR SEPARATOR ANY
+    \item YEAR
+    \item MONTH SEPARATOR DAY SEPARATOR YEAR
+    \item DAY SEPARATOR MONTH SEPARATOR YEAR
+    \item MONTH SEPARATOR DAY SEPARATOR YEAR SEPARATOR
+    \item MONTH SEPARATOR YEAR
+    \item ANY SEPARATOR YEAR SEPARATOR MONTH SEPARATOR DAY SEPARATOR ANY
+    \item MONTH SEPARATOR DAY
+    \item YEAR SEPARATOR MONTH SEPARATOR DAY ANY
+    \item ANY SEPARATOR MONTH SEPARATOR DAY SEPARATOR YEAR
+\end{enumerate}
+
+For example the line:
+
+[[April 20]], 1586 is covered by the rule 13.
+
+\section{Results}
+The file examples\_birth\_date.txt has a total of 12296 lines with different dates format.
+
+7 of that lines couldn't be analyzed because they had non standard characters.
+
+The program could recognize 11759 lines and was unable to recognize 530 lines.
+
+The accuracy was 95.69
+
+\subsection{FSA}
+The number of lines recognized by each of the FSA were:
+
+ANY SEPARATOR MONTH SEPARATOR DAY SEPARATOR YEAR SEPARATOR ANY: 7660
+
+ANY SEPARATOR DAY SEPARATOR MONTH SEPARATOR YEAR SEPARATOR ANY: 1296
+
+YEAR SEPARATOR MONTH SEPARATOR DAY: 1189
+
+ANY SEPARATOR YEAR SEPARATOR ANY: 918
+
+YEAR: 270
+
+MONTH SEPARATOR DAY SEPARATOR YEAR: 150
+
+DAY SEPARATOR MONTH SEPARATOR YEAR: 65
+
+MONTH SEPARATOR DAY SEPARATOR YEAR SEPARATOR: 59
+
+MONTH SEPARATOR YEAR: 59
+
+ANY SEPARATOR YEAR SEPARATOR MONTH SEPARATOR DAY SEPARATOR ANY: 50
+
+MONTH SEPARATOR DAY: 48
+
+YEAR SEPARATOR MONTH SEPARATOR DAY ANY: 33
+
+ANY SEPARATOR MONTH SEPARATOR DAY SEPARATOR YEAR: 11
+
+Here we can see that the most common type of date in the file has the form MONTH DAY YEAR
+
+\end{document}
